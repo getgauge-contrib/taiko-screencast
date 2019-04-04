@@ -1,0 +1,32 @@
+{
+  "name": "taiko-screencast",
+  "version": "0.0.1",
+  "description": "A taiko plugin to record screencast",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getgauge-contrib/taiko-screencast.git"
+  },
+  "keywords": [
+    "taiko",
+    "chrome",
+    "screen",
+    "recording"
+  ],
+  "author": "getgauge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/getgauge-contrib/taiko-screencast/issues"
+  },
+  "homepage": "https://github.com/getgauge-contrib/taiko-screencast#readme",
+  "dependencies": {
+    "taiko": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
