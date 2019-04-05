@@ -58,20 +58,17 @@ var pause = async () => {
  * Stops the screencast recording and saves the frames as a Gif file.
  */
 var stop = () => async () => {
-    try {
-        await pause();        
-    } catch (error) {
-        // do nothing, skip to GIF encoding
-    }
-    const GIFEncoder = require('gifencoder');
-    const pngFileStream = require('png-file-stream');
-    const encoder = new GIFEncoder(_deviceWidth, _deviceHeight);
-    pngFileStream(path.join(_framesPath ,'frame_*.png'))
-        .pipe(encoder.createWriteStream({ repeat: -1, delay: 1000, quality: 10 }))
-        .pipe(fs.createWriteStream(_outFile))
-        .on('close', () => {
-            console.log('Screencast saved to ' + _outFile);
-        });
+    await pause().then(() => {
+        const GIFEncoder = require('gifencoder');
+        const pngFileStream = require('png-file-stream');
+        const encoder = new GIFEncoder(_deviceWidth, _deviceHeight);
+        pngFileStream(path.join(_framesPath ,'frame_*.png'))
+            .pipe(encoder.createWriteStream({ repeat: -1, delay: 1000, quality: 10 }))
+            .pipe(fs.createWriteStream(_outFile))
+            .on('close', () => {
+                console.log('Screencast saved to ' + _outFile);
+            });
+    });
 };
 
 var clientHandler = async (taiko) => {
