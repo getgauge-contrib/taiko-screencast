@@ -1,5 +1,4 @@
-const {client} = require('taiko'),
-    fs = require('fs'),
+const fs = require('fs'),
     os = require('os'),
     path = require('path');
     
@@ -29,15 +28,12 @@ var start = async (outFile) => {
     _framesPath = fs.mkdtempSync(path.join(os.tmpdir(), 'taikoCastFrames'));
     console.log(_framesPath);
     _mkdirp(outPath);
-    if(!_client) {
-        _client = await client();
-        _client.on('Page.screencastFrame', (frame) => {
-            fs.writeFileSync(path.join(_framesPath, 'frame_'+Date.now()+'.png'), frame.data, 'base64');
-            _client.send('Page.screencastFrameAck', {sessionId: frame.sessionId});
-            _deviceWidth = frame.metadata.deviceWidth;
-            _deviceHeight = frame.metadata.deviceHeight;
-        });
-    }
+    _client.on('Page.screencastFrame', (frame) => {
+        fs.writeFileSync(path.join(_framesPath, 'frame_'+Date.now()+'.png'), frame.data, 'base64');
+        _client.send('Page.screencastFrameAck', {sessionId: frame.sessionId});
+        _deviceWidth = frame.metadata.deviceWidth;
+        _deviceHeight = frame.metadata.deviceHeight;
+    });
     await resume();
 };
 
@@ -78,7 +74,13 @@ var stop = () => async () => {
         });
 };
 
+var clientHandler = async (taiko) => {
+    _client = taiko.client();
+}
+
 module.exports = {
+    'ID' : 'screencast',
+    'clientHandler' : clientHandler,
     'startScreencast' : start,
     'pauseScreencast' : pause,
     'resumeScreencast' : resume,

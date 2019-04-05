@@ -23,9 +23,7 @@
     "url": "https://github.com/getgauge-contrib/taiko-screencast/issues"
   },
   "homepage": "https://github.com/getgauge-contrib/taiko-screencast#readme",
-  "dependencies": {
-    "taiko": "latest"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^5.16.0"
   }
