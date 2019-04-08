@@ -1,8 +1,7 @@
 const fs = require('fs'),
-    os = require('os'),
     path = require('path');
     
-var _deviceWidth, _deviceHeight, _client, _outFile, _framesPath;
+var _deviceWidth, _deviceHeight, _client, _outFile, _frames = [];
 
 var _mkdirp = (p) => {
     if (!fs.existsSync(p)){
@@ -25,15 +24,12 @@ var start = async (outFile) => {
     }
     _outFile = outFile;
     var outPath = path.dirname(outFile);
-    _framesPath = fs.mkdtempSync(path.join(os.tmpdir(), 'taikoCastFrames'));
     _mkdirp(outPath);
     _client.on('Page.screencastFrame', (frame) => {
         _client.send('Page.screencastFrameAck', {sessionId: frame.sessionId});
         _deviceWidth = frame.metadata.deviceWidth;
         _deviceHeight = frame.metadata.deviceHeight;
-        fs.writeFile(path.join(_framesPath, 'frame_'+Date.now()+'.png'), frame.data, 'base64', (err) => {
-            if(err) console.error(err);
-        });
+        _frames.push(frame.data);
     });
     await resume();
 };
@@ -63,14 +59,26 @@ var stop = async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
     await pause();
     const GIFEncoder = require('gifencoder');
-    const pngFileStream = require('png-file-stream');
     const encoder = new GIFEncoder(_deviceWidth, _deviceHeight);
-    pngFileStream(path.join(_framesPath, 'frame_*.png'))
-        .pipe(encoder.createWriteStream({ repeat: -1, delay: 1000, quality: 10 }))
+    const {createCanvas, Image} = require('canvas');
+    encoder.createReadStream()
         .pipe(fs.createWriteStream(_outFile))
         .on('close', () => {
             console.log('Screencast saved to ' + _outFile);
         });
+    encoder.setDelay(1000);
+    encoder.setRepeat(0);
+    encoder.setQuality(10);
+    encoder.start();
+    var canvas = createCanvas(_deviceWidth, _deviceHeight);
+    var ctx = canvas.getContext('2d');
+    for (let i = 0; i < _frames.length; i++) {
+        var img = new Image;
+        img.src = 'data:image/png;base64,' + _frames[i];
+        ctx.drawImage(img, 0, 0, _deviceWidth, _deviceHeight);
+        encoder.addFrame(ctx);
+    }
+    encoder.finish();
 };
 
 var clientHandler = async (taiko) => {

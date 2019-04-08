@@ -24,8 +24,7 @@
   },
   "homepage": "https://github.com/getgauge-contrib/taiko-screencast#readme",
   "dependencies": {
-    "gifencoder": "^2.0.1",
-    "png-file-stream": "^1.2.1"
+    "gifencoder": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0"
