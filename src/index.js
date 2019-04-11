@@ -1,7 +1,7 @@
 const fs = require('fs'),
     path = require('path');
     
-var _deviceWidth, _deviceHeight, _client, _outFile, _frames = [];
+var _deviceWidth, _deviceHeight, _client, _outFile,_eventHandler, _frames = [];
 
 var _mkdirp = (p) => {
     if (!fs.existsSync(p)){
@@ -30,6 +30,10 @@ var start = async (outFile) => {
         _deviceWidth = frame.metadata.deviceWidth;
         _deviceHeight = frame.metadata.deviceHeight;
         _frames.push(frame.data);
+    });
+    _eventHandler.once('createdSession', (client) => {
+        _client = client;
+        start(_outFile);
     });
     await resume();
 };
@@ -81,9 +85,10 @@ var stop = async () => {
     encoder.finish();
 };
 
-var clientHandler = async (taiko) => {
+var clientHandler = async (taiko, eventHandler) => {
     _client = taiko.client();
-}
+    _eventHandler = eventHandler;
+};
 
 module.exports = {
     'ID' : 'screencast',
