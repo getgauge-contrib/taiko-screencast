@@ -86,13 +86,16 @@ var stop = async () => {
 };
 
 var clientHandler = async (taiko, eventHandler) => {
-    _client = taiko.client();
     _eventHandler = eventHandler;
+    _eventHandler.on('createdSession', () => {
+        _client = taiko.client();
+    });
 };
 
 module.exports = {
     'ID' : 'screencast',
-    'clientHandler' : clientHandler,
+    'init' : clientHandler,
+    'clientHandler' : clientHandler, //TODO: Should remove this export of <clientHandler> once Taiko's autoload plugins features is available on master.
     'startScreencast' : start,
     'pauseScreencast' : pause,
     'resumeScreencast' : resume,
