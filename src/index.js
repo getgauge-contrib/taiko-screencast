@@ -86,6 +86,7 @@ var stop = async () => {
 };
 
 var clientHandler = async (taiko, eventHandler) => {
+    _client = taiko.client(); //TODO: Should remove this once Taiko's autoload plugins features is available on master.
     _eventHandler = eventHandler;
     _eventHandler.on('createdSession', () => {
         _client = taiko.client();
