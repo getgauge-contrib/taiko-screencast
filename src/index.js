@@ -12,10 +12,10 @@ var _mkdirp = (p) => {
 /**
  * Starts capture of Screencast
  * The screencast captures frames in the active browser tab.
- * Use @see stopScreencast to conclude the recording. 
+ * Use @see stopScreencast to conclude the recording.
  * {@link pause} and {@link resume} can be used to skip recording of any intermediate steps.
  * Only supports saving to 'gif' format presently.
- * @param outFile the path to save the screencast. Filename must have '.gif' extension. 
+ * @param outFile the path to save the screencast. Filename must have '.gif' extension.
  */
 
 var start = async (outFile) => {
@@ -86,7 +86,6 @@ var stop = async () => {
 };
 
 var clientHandler = async (taiko, eventHandler) => {
-    _client = taiko.client(); //TODO: Should remove this once Taiko's autoload plugins features is available on master.
     _eventHandler = eventHandler;
     _eventHandler.on('createdSession', () => {
         _client = taiko.client();
@@ -96,7 +95,6 @@ var clientHandler = async (taiko, eventHandler) => {
 module.exports = {
     'ID' : 'screencast',
     'init' : clientHandler,
-    'clientHandler' : clientHandler, //TODO: Should remove this export of <clientHandler> once Taiko's autoload plugins features is available on master.
     'startScreencast' : start,
     'pauseScreencast' : pause,
     'resumeScreencast' : resume,
