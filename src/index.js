@@ -31,7 +31,7 @@ var start = async (outFile) => {
         _deviceHeight = frame.metadata.deviceHeight;
         _frames.push(frame.data);
     });
-    _eventHandler.once('createdSession', (client) => {
+    _eventHandler.on('createdSession', (client) => {
         _client = client;
         start(_outFile);
     });
