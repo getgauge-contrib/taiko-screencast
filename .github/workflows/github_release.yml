@@ -5,23 +5,18 @@ on: [deployment]
 jobs:
   deploy:
     name: Create Draft with assets
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
     steps:
-      - uses: actions/checkout@v1
-
+      - uses: actions/checkout@v2
       - name: Set up Nodejs
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
-
+          node-version: '16'
       - name: npm install
         run: |
           npm install
-      - name: Install hub
-        run: brew install hub
-
       - name: update release note
         run: |
           version=$(grep '"version"' package.json | sed 's/"version":[[:space:]]*"//' | sed 's/",//' | tr -d [:space:])
