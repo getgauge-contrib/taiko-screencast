@@ -5,3 +5,4 @@ build/*
 .eslintrc
 .vscode
 .github
+release.sh
