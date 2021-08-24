@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/getgauge-contrib/taiko-screencast#readme",
   "dependencies": {
-    "canvas": "2.5.0",
+    "canvas": "2.8.0",
     "gifencoder": "^2.0.1"
   },
   "devDependencies": {
